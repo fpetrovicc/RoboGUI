@@ -4,16 +4,16 @@ using System.Windows.Forms;
 
 namespace RoboGUI
 {
-    public partial class robogui : Form
+    public partial class Robogui : Form
     {
         private String[] _ports;
         private SerialPort _port;
 
-        private const int baudRate = 9600;
+        private const int BaudRate = 9600;
 
         private bool _isConnected; // connection to the Arduino
 
-        public robogui()
+        public Robogui()
         {
             InitializeComponent();
             DisableControls(); // disabling controls for better UI
@@ -32,6 +32,13 @@ namespace RoboGUI
             stopButton.Click += stopButton_Click;
             sendComButton.Click += sendComButton_Click;
             comTextBox.KeyDown += comTextBox_KeyDown;
+
+            letterA.Click += LetterClicks;
+            letterB.Click += LetterClicks;
+            letterC.Click += LetterClicks;
+            letterD.Click += LetterClicks;
+            letterE.Click += LetterClicks;
+            
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -42,6 +49,8 @@ namespace RoboGUI
 
                 startButton.Enabled = false;
                 stopButton.Enabled = true;
+                
+                EnableControls();
             }
         }
 
@@ -53,6 +62,8 @@ namespace RoboGUI
 
                 startButton.Enabled = true;
                 stopButton.Enabled = false;
+                
+                DisableControls();
             }
         }
 
@@ -68,8 +79,31 @@ namespace RoboGUI
         {
             if (e.KeyCode == Keys.Enter)
             {
+                e.SuppressKeyPress = true;
                 sendComButton.PerformClick();
                 comTextBox.Text = "";
+            }
+        }
+
+        private void LetterClicks(object sender, EventArgs e)
+        {
+            switch ((sender as Button)?.Name)
+            {
+                case "letterA":
+                    _port.Write("a");
+                    break;
+                case "letterB":
+                    _port.Write("b");
+                    break;
+                case "letterC":
+                    _port.Write("c");
+                    break;
+                case "letterD":
+                    _port.Write("d");
+                    break;
+                case "letterE":
+                    _port.Write("e");
+                    break;
             }
         }
         
@@ -78,7 +112,7 @@ namespace RoboGUI
             _isConnected = true;
 
             string sel = portSelector.GetItemText(portSelector.SelectedItem);
-            _port = new SerialPort(sel, baudRate, Parity.None, 8, StopBits.One);
+            _port = new SerialPort(sel, BaudRate, Parity.None, 8, StopBits.One);
 
             _port.Open();
 
@@ -87,8 +121,9 @@ namespace RoboGUI
 
         private void StopArduino()
         {
+            _port.Write("@");
+            
             _isConnected = false;
-
             _port.Close();
         }
 
@@ -99,14 +134,23 @@ namespace RoboGUI
 
         private void EnableControls()
         {
-            // TO-DO - dodati ostale opcije uz novu dugmad
+            sendComButton.Enabled = true;
+            letterA.Enabled = true;
+            letterB.Enabled = true;
+            letterC.Enabled = true;
+            letterD.Enabled = true;
+            letterE.Enabled = true;
         }
 
         private void DisableControls()
         {
             stopButton.Enabled = false;
+            sendComButton.Enabled = false;
+            letterA.Enabled = false;
+            letterB.Enabled = false;
+            letterC.Enabled = false;
+            letterD.Enabled = false;
+            letterE.Enabled = false;
         }
-
-        
     }
 }

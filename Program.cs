@@ -16,7 +16,7 @@ namespace RoboGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new robogui());
+            Application.Run(new Robogui());
         }
     }
 }
