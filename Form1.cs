@@ -72,7 +72,7 @@ namespace RoboGUI
                 comTextBox.Text = "";
             }
         }
-
+        
         private void InitArduino()
         {
             _isConnected = true;
