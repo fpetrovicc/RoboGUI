@@ -30,6 +30,8 @@ namespace RoboGUI
 
             startButton.Click += startButton_Click;
             stopButton.Click += stopButton_Click;
+            sendComButton.Click += sendComButton_Click;
+            comTextBox.KeyDown += comTextBox_KeyDown;
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -54,6 +56,23 @@ namespace RoboGUI
             }
         }
 
+        private void sendComButton_Click(object sender, EventArgs e)
+        {
+            if (_isConnected)
+            {
+                _port.Write(comTextBox.Text);
+            }
+        }
+
+        private void comTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                sendComButton.PerformClick();
+                comTextBox.Text = "";
+            }
+        }
+        
         private void InitArduino()
         {
             _isConnected = true;
@@ -87,5 +106,7 @@ namespace RoboGUI
         {
             stopButton.Enabled = false;
         }
+
+        
     }
 }
