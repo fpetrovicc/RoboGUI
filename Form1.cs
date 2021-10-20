@@ -9,9 +9,9 @@ namespace RoboGUI
         private string[] _ports;
         private SerialPort _port;
 
+        private bool _isConnected;
         private const int BaudRate = 9600;
-        private bool _isConnected; // connection to the Arduino
-        
+
         private readonly String[] _letters =
         {
             "letterA", "letterB", "letterC", "letterD", "letterE",
@@ -26,8 +26,8 @@ namespace RoboGUI
         public Robogui()
         {
             InitializeComponent();
-            DisableControls(); // disabling controls for better UI
-            GetAvailablePorts(); // getting available ports from system
+            DisableControls();
+            GetAvailablePorts();
 
             foreach (string port in _ports)
             {
