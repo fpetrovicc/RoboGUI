@@ -6,18 +6,28 @@ namespace RoboGUI
 {
     public partial class Robogui : Form
     {
-        private String[] _ports;
+        private string[] _ports;
         private SerialPort _port;
 
+        private bool _isConnected;
         private const int BaudRate = 9600;
 
-        private bool _isConnected; // connection to the Arduino
+        private readonly String[] _letters =
+        {
+            "letterA", "letterB", "letterC", "letterD", "letterE",
+            "letterF", "letterG", "letterH", "letteri", "letterJ",
+            "letterK", "letterL", "letterM", "letterN", "letterO",
+            "letterP", "letterQ", "letterS", "letterT", "letterU", 
+            "letterV", "letterW", "letterX", "letterY", "letterZ"
+        };
 
+        private static readonly char[] Alpha = "abcdefghijklmnopqstuvwxyz".ToCharArray();
+        
         public Robogui()
         {
             InitializeComponent();
-            DisableControls(); // disabling controls for better UI
-            GetAvailablePorts(); // getting available ports from system
+            DisableControls();
+            GetAvailablePorts();
 
             foreach (string port in _ports)
             {
@@ -27,17 +37,16 @@ namespace RoboGUI
                     portSelector.SelectedItem = _ports[0];
                 }
             }
-
-            startButton.Click += startButton_Click;
+            
             stopButton.Click += stopButton_Click;
-            sendComButton.Click += sendComButton_Click;
+            startButton.Click += startButton_Click;
             comTextBox.KeyDown += comTextBox_KeyDown;
-
-            letterA.Click += LetterClicks;
-            letterB.Click += LetterClicks;
-            letterC.Click += LetterClicks;
-            letterD.Click += LetterClicks;
-            letterE.Click += LetterClicks;
+            sendComButton.Click += sendComButton_Click;
+            
+            foreach (Control c in groupBox3.Controls)
+            {
+                c.Click += LetterClicks;
+            }
             
         }
 
@@ -84,26 +93,15 @@ namespace RoboGUI
                 comTextBox.Text = "";
             }
         }
-
+        
         private void LetterClicks(object sender, EventArgs e)
         {
-            switch ((sender as Button)?.Name)
+            for (int j = 0; j < _letters.Length; j++)
             {
-                case "letterA":
-                    _port.Write("a");
-                    break;
-                case "letterB":
-                    _port.Write("b");
-                    break;
-                case "letterC":
-                    _port.Write("c");
-                    break;
-                case "letterD":
-                    _port.Write("d");
-                    break;
-                case "letterE":
-                    _port.Write("e");
-                    break;
+                if (Equals((sender as Button)?.Name, _letters[j]))
+                {
+                    _port.Write(Alpha[j].ToString());
+                }
             }
         }
         
@@ -134,23 +132,15 @@ namespace RoboGUI
 
         private void EnableControls()
         {
-            sendComButton.Enabled = true;
-            letterA.Enabled = true;
-            letterB.Enabled = true;
-            letterC.Enabled = true;
-            letterD.Enabled = true;
-            letterE.Enabled = true;
+            groupBox2.Enabled = true;
+            groupBox3.Enabled = true;
         }
 
         private void DisableControls()
         {
             stopButton.Enabled = false;
-            sendComButton.Enabled = false;
-            letterA.Enabled = false;
-            letterB.Enabled = false;
-            letterC.Enabled = false;
-            letterD.Enabled = false;
-            letterE.Enabled = false;
+            groupBox2.Enabled = false;
+            groupBox3.Enabled = false;
         }
     }
 }
