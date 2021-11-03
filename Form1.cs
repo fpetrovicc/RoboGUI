@@ -21,8 +21,13 @@ namespace RoboGUI
             "letterV", "letterW", "letterX", "letterY", "letterZ"
         };
 
-        private static readonly char[] Alpha = "abcdefghijklmnopqstuvwxyz".ToCharArray();
-        
+        private readonly String[] _letterValues =
+        {
+            "0 170 170 170 170 0", 
+            "170 0 0 0 0 0",
+            "0 120 90 120 90 0"
+        };
+            
         public Robogui()
         {
             InitializeComponent();
@@ -100,7 +105,7 @@ namespace RoboGUI
             {
                 if (Equals((sender as Button)?.Name, _letters[j]))
                 {
-                    _port.Write(Alpha[j].ToString());
+                    _port.Write(_letterValues[j]);
                 }
             }
         }

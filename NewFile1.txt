@@ -1,0 +1,145 @@
+﻿#include <Servo.h>
+
+Servo servoArray[5];
+short servoValues[5] = {0, 0, 0, 0, 0};
+short servoPins[5] = {8, 9, 10, 11, 12};
+
+void setup()
+{
+  for (short i = 0; i < 5; i++) 
+  {
+    servoArray[i].attach(servoPins[i]);
+    servoArray[i].write(servoValues[i]);
+    delay(20);
+  }
+  
+  Serial.begin(9600);
+
+  //delay(1000);
+  //pk();
+}
+
+void loop()
+{
+  if (Serial.available() > 0)
+  {
+    reset();
+    for (short i = 0; i < 5; i++) 
+    {
+      servoValues[i] = Serial.parseInt();
+      Serial.println(servoValues[i]);
+    }
+
+    int palacStanje = Serial.parseInt();
+    Serial.println(palacStanje);
+
+    if (palacStanje == 0) // Palac ide prvi
+    {
+      for (short i = 0; i < 5; i++) 
+      {
+        servoArray[i].write(servoValues[i]);
+        delay(20);
+        
+        if (i == 0)
+        {
+          delay(800);
+        }
+      }
+    } else { // Palac ide poslednji
+      for (short i = 1; i < 5; i++) {
+        servoArray[i].write(servoValues[i]); 
+        delay(20);
+      }
+      delay(800);
+      servoArray[0].write(servoValues[0]);
+    }
+  }
+}
+
+void reset()
+{
+  delay(1000);
+  
+  for (short i = 0; i < 5; i++) 
+  {
+    servoArray[i].write(0);
+    delay(20);
+  }
+
+  delay(1000);
+}
+
+short int konverzija(short prst, short stepen) 
+{
+  switch(prst) {
+    case 0:
+      return stepen * 1;
+      break;
+    case 1:
+      return stepen * 1;
+      break;
+    case 2:
+      return stepen * 1;
+      break; 
+    case 3:
+      return stepen * 1;
+      break; 
+    case 4:
+      return stepen * 1;
+      break;
+  }
+}
+
+/*
+void sweepFinger(short i, short finalValue, short stepValue) {
+  
+  for (short j = 0; j <= finalValue; j += stepValue) {
+    servoArray[i].write(j);
+    delay(20);
+  }
+  
+  for (short j = 180; j >= 0; j -= stepValue) {
+    servoArray[i].write(j);
+    delay(20);
+  }
+}
+
+void slovoA() 
+{
+  servoArray[0].write(0);
+  delay(800);
+  servoArray[1].write(180);
+  delay(20);
+  servoArray[2].write(180);
+  delay(20);
+  servoArray[3].write(180);
+  delay(20);
+  servoArray[4].write(180);
+  delay(20);
+}
+
+void slovoB() 
+{
+  servoArray[0].write(170);
+  delay(800);
+  servoArray[1].write(0);
+  delay(20);
+  servoArray[2].write(0);
+  delay(20);
+  servoArray[3].write(0);
+  delay(20);
+  servoArray[4].write(0);
+  delay(20);
+}
+
+void pk() 
+{
+  servoArray[0].write(115);
+  delay(500);
+  servoArray[1].write(140);
+  delay(20);
+  servoArray[2].write(50);
+  delay(20);
+  servoArray[3].write(70);
+  //sweepFinger(1, 140, 2); 
+}*/
